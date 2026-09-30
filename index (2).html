@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Xiter - Treino</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, #24104d, #090012 55%, #030006);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.panel {
+  width: 100%;
+  max-width: 430px;
+  background: rgba(12, 8, 25, .94);
+  border: 1px solid #a855f7;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 30px rgba(168,85,247,.35);
+}
+
+h1 {
+  text-align: center;
+  color: #d8b4fe;
+  font-size: 25px;
+  margin-bottom: 5px;
+  text-shadow: 0 0 12px #a855f7;
+}
+
+.subtitle {
+  text-align: center;
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.section {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(168,85,247,.25);
+  border-radius: 14px;
+  padding: 15px;
+  margin-bottom: 14px;
+}
+
+.section h2 {
+  font-size: 15px;
+  color: #c084fc;
+  margin-bottom: 12px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  margin-top: 8px;
+  background: linear-gradient(90deg,#7e22ce,#a855f7);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(168,85,247,.25);
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+input[type="range"] {
+  width: 60%;
+  accent-color: #a855f7;
+}
+
+.value {
+  color: #d8b4fe;
+  min-width: 35px;
+  text-align: right;
+}
+
+.toggle {
+  position: relative;
+  width: 48px;
+  height: 25px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #333;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  width: 19px;
+  height: 19px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: .25s;
+}
+
+.toggle input:checked + .slider {
+  background: #9333ea;
+}
+
+.toggle input:checked + .slider:before {
+  transform: translateX(23px);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+}
+
+.stat {
+  text-align: center;
+  background: #130b22;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.stat strong {
+  display: block;
+  color: #d8b4fe;
+  font-size: 20px;
+}
+
+.stat span {
+  color: #888;
+  font-size: 11px;
+}
+
+#arena {
+  height: 210px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle, #241038, #08020e);
+  border: 1px solid #6b21a8;
+  cursor: crosshair;
+}
+
+.target {
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 18px #a855f7;
+  display: none;
+}
+
+.crosshair {
+  position: fixed;
+  pointer-events: none;
+  width: 30px;
+  height: 30px;
+  display: none;
+  z-index: 999;
+}
+
+.crosshair:before,
+.crosshair:after {
+  content: "";
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 0 6px #a855f7;
+}
+
+.crosshair:before {
+  width: 2px;
+  height: 30px;
+  left: 14px;
+}
+
+.crosshair:after {
+  width: 30px;
+  height: 2px;
+  top: 14px;
+}
+
+.status {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+  <h1>⚡ AIM TRAINER</h1>
+  <div class="subtitle">PAINEL DE TREINO • VISUAL GAMER</div>
+
+  <div class="section">
+    <h2>🎯 Mira visual</h2>
+
+    <div class="row">
+      <span>Mira na tela</span>
+      <label class="toggle">
+        <input type="checkbox" id="aimToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="row">
+      <span>Tamanho</span>
+      <input id="size" type="range" min="15" max="60" value="30">
+      <span class="value" id="sizeValue">30</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>⚙️ Sensibilidade de treino</h2>
+
+    <div class="row">
+      <span>Geral</span>
+      <input id="general" type="range" min="1" max="200" value="100">
+      <span class="value" id="generalValue">100</span>
+    </div>
+
+    <div class="row">
+      <span>Ponto vermelho</span>
+      <input id="redDot" type="range" min="1" max="200" value="90">
+      <span class="value" id="redDotValue">90</span>
+    </div>
+
+    <div class="row">
+      <span>Precisão</span>
+      <input id="precision" type="range" min="1" max="100" value="75">
+      <span class="value" id="precisionValue">75</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🧠 Teste de reflexo</h2>
+
+    <div id="arena">
+      <div class="target" id="target"></div>
+    </div>
+
+    <button id="start">INICIAR TREINO</button>
+
+    <div class="status" id="status">
+      Clique em iniciar para começar.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📊 Estatísticas</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <strong id="hits">0</strong>
+        <span>ACERTOS</span>
+      </div>
+
+      <div class="stat">
+        <strong id="misses">0</strong>
+        <span>ERROS</span>
+      </div>
+
+      <div class="stat">
+        <strong id="best">0</strong>
+        <span>MELHOR MS</span>
+      </div>
+    </div>
+
+    <button id="reset">RESETAR</button>
+  </div>
+
+</div>
+
+<div class="crosshair" id="crosshair"></div>
+
+<script>
+const aimToggle = document.getElementById("aimToggle");
+const crosshair = document.getElementById("crosshair");
+const size = document.getElementById("size");
+const sizeValue = document.getElementById("sizeValue");
+
+aimToggle.addEventListener("change", () => {
+  crosshair.style.display =
+    aimToggle.checked ? "block" : "none";
+});
+
+document.addEventListener("mousemove", e => {
+  crosshair.style.left = (e.clientX - 15) + "px";
+  crosshair.style.top = (e.clientY - 15) + "px";
+});
+
+size.addEventListener("input", () => {
+  sizeValue.textContent = size.value;
+  crosshair.style.width = size.value + "px";
+  crosshair.style.height = size.value + "px";
+});
+
+function bindRange(id) {
+  const input = document.getElementById(id);
+  const output = document.getElementById(id + "Value");
+
+  input.addEventListener("input", () => {
+    output.textContent = input.value;
+  });
+}
+
+bindRange("general");
+bindRange("redDot");
+bindRange("precision");
+
+const arena = document.getElementById("arena");
+const target = document.getElementById("target");
+const start = document.getElementById("start");
+const status = document.getElementById("status");
+
+const hitsEl = document.getElementById("hits");
+const missesEl = document.getElementById("misses");
+const bestEl = document.getElementById("best");
+
+let hits = 0;
+let misses = 0;
+let best = 0;
+let startTime = 0;
+let running = false;
+
+function spawnTarget() {
+  const maxX = arena.clientWidth - target.offsetWidth;
+  const maxY = arena.clientHeight - target.offsetHeight;
+
+  target.style.left =
+    Math.floor(Math.random() * maxX) + "px";
+
+  target.style.top =
+    Math.floor(Math.random() * maxY) + "px";
+
+  target.style.display = "block";
+  startTime = performance.now();
+}
+
+start.addEventListener("click", () => {
+  running = true;
+  status.textContent = "🎯 Acerte o alvo!";
+  spawnTarget();
+});
+
+target.addEventListener("click", e => {
+  if (!running) return;
+
+  e.stopPropagation();
+
+  const reaction =
+    Math.round(performance.now() - startTime);
+
+  hits++;
+  hitsEl.textContent = hits;
+
+  if (best === 0 || reaction < best) {
+    best = reaction;
+    bestEl.textContent = best;
+  }
+
+  status.textContent =
+    "Acerto! " + reaction + " ms";
+
+  spawnTarget();
+});
+
+arena.addEventListener("click", e => {
+  if (!running || e.target === target) return;
+
+  misses++;
+  missesEl.textContent = misses;
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  hits = 0;
+  misses = 0;
+  best = 0;
+  running = false;
+
+  hitsEl.textContent = "0";
+  missesEl.textContent = "0";
+  bestEl.textContent = "0";
+
+  target.style.display = "none";
+  status.textContent =
+    "Clique em iniciar para começar.";
+});
+</script>
+
+</body>
+E desbanir conta 
